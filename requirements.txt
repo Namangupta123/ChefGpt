@@ -2,3 +2,4 @@ streamlit==1.12.0
 python-dotenv==0.20.0
 langchain-cohere==0.1.5
 dotenv
+pip==24.2
