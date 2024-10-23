@@ -23,7 +23,9 @@ ui_translations = {
 }
 
 template = """
-Based on the ingredients provided, suggest an Indian recipe limited to those ingredients only with step-wise and easy procedure.
+Based on the ingredients provided, suggest an Indian recipe. 
+Stick to only those ingredients provided by user.
+Provide simple and step-wise procedure in brief.
 
 Ingredients: {ingredients}
 Recipe:
