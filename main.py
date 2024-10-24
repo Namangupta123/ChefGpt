@@ -30,7 +30,7 @@ ui_translations = {
         'button_label': 'Get Recipe',
         'reset_label': 'RESET',
         'error_message': 'Please provide some ingredients!',
-        'error_response':'Sorry no able to answer this time !!',
+        'error_response':'Sorry not able to answer this time !!',
         'success_message': 'Here’s your recipe based on your ingredients:',
         'previous_suggestions': 'Previous recipes:',
     }
