@@ -126,7 +126,7 @@ def main():
                         })
 
                         st.success(lang['success_message'])
-                        st.write(result, language='markdown')
+                        st.text(result, language='markdown')
 
                     except Exception as e:
                         st.error(f"An error occurred: {e}")
