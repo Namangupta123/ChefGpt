@@ -7,7 +7,7 @@ import os
 
 load_dotenv()
 
-cohere_api = 'tv305m4aRnon5HdpYMnTsNR2IJAAQExjgaCYvEx3'
+cohere_api = st.secrets["API_KEYS"]["COHERE_API_KEY"]
 cohere_llm = ChatCohere(model="command", temperature=0.3, cohere_api_key=cohere_api)
 
 ui_translations = {
