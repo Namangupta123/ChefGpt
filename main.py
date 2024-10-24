@@ -83,48 +83,61 @@ def main():
 
     st.title(lang['title'])
 
+    # Display previous conversation history using st.chat_message
     if st.session_state['messages']:
         for msg in st.session_state['messages']:
             with st.chat_message(msg['role']):
                 st.markdown(msg['content'])
 
-
+    # Check if the user input for ingredients exists before proceeding to diet selection
     if diet_message := st.chat_input("Enter your ingredients (e.g., 'rice, cumin, turmeric')"):
+        # Store the user input in chat history
         st.session_state['messages'].append({"role": "user", "content": diet_message})
         
+        # Display multiselect for dietary restrictions after user enters ingredients
         selected_diet = st.multiselect(lang['diet_label'], dietary_restrictions)
-        
-        with st.spinner("Fetching a recipe..."):
-            try:
-                input_data = {
-                    "ingredients": diet_message,
-                    "diet": ', '.join(selected_diet) if selected_diet else 'No restrictions'
-                }
 
-                response = (
-                    prompt
-                    | llm.bind(stop=["\nRecipe:"])
-                    | StrOutputParser()
-                )
-                result = response.invoke(input_data)
+        # If the user doesn't select a diet, show a warning
+        if not selected_diet and st.button("Proceed without restrictions"):
+            selected_diet = []
 
-                assistant_message = f"**Recipe:**\n{result}"
-                st.session_state['messages'].append({"role": "assistant", "content": assistant_message})
+        if selected_diet or st.button("Proceed without restrictions"):
+            with st.spinner("Fetching a recipe..."):
+                try:
+                    input_data = {
+                        "ingredients": diet_message,
+                        "diet": ', '.join(selected_diet) if selected_diet else 'No restrictions'
+                    }
 
-                st.session_state['recipe_history'].append({
-                    "ingredients": diet_message,
-                    "diet": selected_diet,
-                    "recipe": result
-                })
+                    # Generate recipe using Together LLM
+                    response = (
+                        prompt
+                        | llm.bind(stop=["\nRecipe:"])
+                        | StrOutputParser()
+                    )
+                    result = response.invoke(input_data)
 
-                with st.chat_message("assistant"):
-                    st.markdown(assistant_message)
+                    # Store the assistant's response in the chat history
+                    assistant_message = f"**Recipe:**\n{result}"
+                    st.session_state['messages'].append({"role": "assistant", "content": assistant_message})
 
-            except Exception as e:
-                error_message = f"An error occurred: {e}"
-                st.session_state['messages'].append({"role": "assistant", "content": error_message})
-                st.error(error_message)
+                    # Add recipe to the session history for display
+                    st.session_state['recipe_history'].append({
+                        "ingredients": diet_message,
+                        "diet": selected_diet,
+                        "recipe": result
+                    })
 
+                    # Display the assistant's message
+                    with st.chat_message("assistant"):
+                        st.markdown(assistant_message)
+
+                except Exception as e:
+                    error_message = f"An error occurred: {e}"
+                    st.session_state['messages'].append({"role": "assistant", "content": error_message})
+                    st.error(error_message)
+
+    # Sidebar section with About information
     with st.sidebar:
         st.header("About")
         st.write("Naman Gupta")
@@ -135,7 +148,7 @@ def main():
         if st.button(lang['reset_label']):
             st.session_state['recipe_history'].clear()
             st.session_state['messages'].clear()
-            st.experimental_rerun()
+            st.rerun()
 
 if __name__ == "__main__":
     main()
