@@ -2,13 +2,24 @@ import streamlit as st
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
 from langchain_together import Together
-from dotenv import load_dotenv
+# from dotenv import load_dotenv
 import os
 
-load_dotenv()
+# load_dotenv()
+# os.environ["LANGCHAIN_TRACING_V2"]="true"
+# os.environ["LANGCHAIN_ENDPOINT"]=os.getenv("LANGSMITH_ENDPOINT")
+# os.environ["LANGCHAIN_API_KEY"]=os.getenv("LANGSMITH_API")
+# os.environ["LANGCHAIN_PROJECT"]=os.getenv("LANGSMITH_PROJECT")
+# Together_api = os.getenv("TOGETHER_KEY")
+# model_name= os.getenv("NAME")
+
+os.environ["LANGCHAIN_TRACING_V2"]="true"
+os.environ["LANGCHAIN_ENDPOINT"]=st.secrets["LANGSMITH"]["LANGSMITH_ENDPOINT"]
+os.environ["LANGCHAIN_API_KEY"]=st.secrets["API_KEYS"]["LANGSMITH_API"]
+os.environ["LANGCHAIN_PROJECT"]=st.secrets["LANGSMITH"]["LANGSMITH_PROJECT"]
 
 Together_api = st.secrets["API_KEYS"]["TOGETHER_KEY"]
-model_name=st.secrets["model"]["NAME"]
+model_name=st.secrets["MODEL"]["NAME"]
 llm = Together(model=model_name, temperature=0.3, together_api_key=Together_api, max_tokens=300)
 
 ui_translations = {
