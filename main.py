@@ -1,14 +1,15 @@
 import streamlit as st
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
-from langchain_cohere import ChatCohere
+from langchain_together import Together
 from dotenv import load_dotenv
 import os
 
 load_dotenv()
 
-cohere_api = st.secrets["API_KEYS"]["COHERE_API_KEY"]
-cohere_llm = ChatCohere(model="command", temperature=0.3, cohere_api_key=cohere_api)
+Together_api = st.secrets["API_KEYS"]["TOGETHER_API_KEY"]
+model_name=st.secrets["model"]["NAME"]
+llm = Together(model=model_name, temperature=0.3, together_api_key=Together_api, max_tokens=300)
 
 ui_translations = {
     'en': {
@@ -85,7 +86,7 @@ def main():
 
                         response = (
                             prompt
-                            | cohere_llm.bind(stop=["\nRecipe:"])
+                            | llm.bind(stop=["\nRecipe:"])
                             | StrOutputParser()
                         )
                         result = response.invoke(input_data)
