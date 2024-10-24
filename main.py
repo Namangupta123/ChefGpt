@@ -26,8 +26,10 @@ ui_translations = {
 dietary_restrictions = ['Low-carb', 'Low-fat', 'Gluten-free', 'Vegan', 'Vegetarian', 'High Protein']
 
 template = """
-Based on the ingredients provided and any dietary restrictions, suggest an recipe which have indian taste basically indian dish. 
+Based on the ingredients provided and any dietary restrictions, 
+suggest an recipe which have indian taste basically indian dish. 
 Stick to only those ingredients provided by the user.
+Decide whether the ingredients contain any non-veg or veg option and return the result accordingly.
 If any dietary restrictions are provided, ensure the recipe adheres to them.
 Provide a simple, step-wise procedure in brief.
 If not able to find one return appropriate message.
