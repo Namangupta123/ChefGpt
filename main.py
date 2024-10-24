@@ -7,13 +7,14 @@ import os
 
 load_dotenv()
 
-cohere_api = st.secrets["API_KEYS"]["COHERE_API_KEY"]
+cohere_api = 'tv305m4aRnon5HdpYMnTsNR2IJAAQExjgaCYvEx3'
 cohere_llm = ChatCohere(model="command", temperature=0.3, cohere_api_key=cohere_api)
 
 ui_translations = {
     'en': {
         'title': 'ChefGPT',
         'ingredients_label': 'Enter your ingredients (e.g., "rice, cumin, turmeric"):',
+        'diet_label': 'Select any dietary restrictions (optional):',
         'button_label': 'Get Recipe',
         'reset_label': 'RESET',
         'error_message': 'Please provide some ingredients!',
@@ -22,18 +23,23 @@ ui_translations = {
     }
 }
 
+# Dietary restriction options
+dietary_restrictions = ['Low-carb', 'Low-fat', 'Gluten-free', 'Vegan', 'Vegetarian', 'High Protein']
+
 template = """
-Based on the ingredients provided, suggest an Indian recipe. 
-Stick to only those ingredients provided by user.
-Provide simple and step-wise procedure in brief.
+Based on the ingredients provided and any dietary restrictions, suggest an Indian recipe. 
+Stick to only those ingredients provided by the user.
+If any dietary restrictions are provided, ensure the recipe adheres to them.
+Provide a simple, step-wise procedure in brief.
 
 Ingredients: {ingredients}
+Dietary restrictions: {diet}
 Recipe:
 """
 
 prompt = ChatPromptTemplate.from_messages(
     [
-        ("system", "Suggest an Indian recipe based on the user's available ingredients with full procedure."),
+        ("system", "Suggest an Indian recipe based on the user's available ingredients and dietary restrictions with a full procedure."),
         ("human", template),
     ]
 )
@@ -53,10 +59,13 @@ def main():
 
     ingredients_input = st.text_area(lang['ingredients_label'], key="ingredients", placeholder="E.g., 'rice, cumin, turmeric'")
 
+    # Dietary restriction selection
+    selected_diet = st.multiselect(lang['diet_label'], dietary_restrictions)
+
     if st.session_state['recipe_history']:
         st.subheader(lang['previous_suggestions'])
         for idx, entry in enumerate(st.session_state['recipe_history'], 1):
-            st.write(f"{idx}. {entry['ingredients']}")
+            st.write(f"{idx}. {entry['ingredients']} ({', '.join(entry['diet']) if entry['diet'] else 'No restrictions'})")
             st.code(entry['recipe'], language='markdown')
 
     col1, col2 = st.columns([2, 1])
@@ -68,7 +77,8 @@ def main():
                 with st.spinner("Fetching a recipe..."):
                     try:
                         input_data = {
-                            "ingredients": ingredients_input
+                            "ingredients": ingredients_input,
+                            "diet": ', '.join(selected_diet) if selected_diet else 'No restrictions'
                         }
 
                         response = (
@@ -80,6 +90,7 @@ def main():
 
                         st.session_state['recipe_history'].append({
                             "ingredients": ingredients_input,
+                            "diet": selected_diet,
                             "recipe": result
                         })
 
