@@ -2,8 +2,8 @@ import streamlit as st
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
 from langchain_together import Together
-import os
 # from dotenv import load_dotenv
+import os
 
 # load_dotenv()
 # os.environ["LANGCHAIN_TRACING_V2"]="true"
@@ -13,19 +13,21 @@ import os
 # Together_api = os.getenv("TOGETHER_KEY")
 # model_name= os.getenv("NAME")
 
-os.environ["LANGCHAIN_TRACING_V2"] = "true"
-os.environ["LANGCHAIN_ENDPOINT"] = st.secrets["LANGSMITH"]["LANGSMITH_ENDPOINT"]
-os.environ["LANGCHAIN_API_KEY"] = st.secrets["API_KEYS"]["LANGSMITH_API"]
-os.environ["LANGCHAIN_PROJECT"] = st.secrets["LANGSMITH"]["LANGSMITH_PROJECT"]
+os.environ["LANGCHAIN_TRACING_V2"]="true"
+os.environ["LANGCHAIN_ENDPOINT"]=st.secrets["LANGSMITH"]["LANGSMITH_ENDPOINT"]
+os.environ["LANGCHAIN_API_KEY"]=st.secrets["API_KEYS"]["LANGSMITH_API"]
+os.environ["LANGCHAIN_PROJECT"]=st.secrets["LANGSMITH"]["LANGSMITH_PROJECT"]
 
 Together_api = st.secrets["API_KEYS"]["TOGETHER_KEY"]
-model_name = st.secrets["MODEL"]["NAME"]
+model_name=st.secrets["MODEL"]["NAME"]
 llm = Together(model=model_name, temperature=0.3, together_api_key=Together_api, max_tokens=300)
 
 ui_translations = {
     'en': {
         'title': 'ChefGPT',
+        'ingredients_label': 'Enter your ingredients (e.g., "rice, cumin, turmeric"):',
         'diet_label': 'Select any dietary restrictions (optional):',
+        'button_label': 'Get Recipe',
         'reset_label': 'RESET',
         'error_message': 'Please provide some ingredients!',
         'success_message': 'Here’s your recipe based on your ingredients:',
@@ -35,7 +37,8 @@ ui_translations = {
 
 dietary_restrictions = ['Low-carb', 'Low-fat', 'Gluten-free', 'Vegan', 'Vegetarian', 'High Protein']
 
-template = """You are an AI culinary assistant specializing in Indian cuisine. Your task is to create a recipe based on the provided ingredients and dietary restrictions. Follow these steps to ensure the recipe meets the user's needs:
+template = """
+You are an AI culinary assistant specializing in Indian cuisine. Your task is to create a recipe based on the provided ingredients and dietary restrictions. Follow these steps to ensure the recipe meets the user's needs:
 
 1. **Identify Ingredients**: Determine whether the provided ingredients are vegetarian or non-vegetarian.
 2. **Check Dietary Restrictions**: Ensure the recipe adheres to any dietary restrictions specified by the user.
@@ -71,8 +74,6 @@ prompt = ChatPromptTemplate.from_messages(
 def init_session_state():
     if 'recipe_history' not in st.session_state:
         st.session_state['recipe_history'] = []
-    if 'messages' not in st.session_state:
-        st.session_state['messages'] = []
 
 def main():
     init_session_state()
@@ -83,72 +84,57 @@ def main():
 
     st.title(lang['title'])
 
-    # Display previous conversation history using st.chat_message
-    if st.session_state['messages']:
-        for msg in st.session_state['messages']:
-            with st.chat_message(msg['role']):
-                st.markdown(msg['content'])
+    ingredients_input = st.text_area(lang['ingredients_label'], key="ingredients", placeholder="E.g., 'rice, cumin, turmeric'")
 
-    # Check if the user input for ingredients exists before proceeding to diet selection
-    if diet_message := st.chat_input("Enter your ingredients (e.g., 'rice, cumin, turmeric')"):
-        # Store the user input in chat history
-        st.session_state['messages'].append({"role": "user", "content": diet_message})
-        
-        # Display multiselect for dietary restrictions after user enters ingredients
-        selected_diet = st.multiselect(lang['diet_label'], dietary_restrictions)
+    # Dietary restriction selection
+    selected_diet = st.multiselect(lang['diet_label'], dietary_restrictions)
 
-        # If the user doesn't select a diet, show a warning
-        if not selected_diet and st.button("Proceed without restrictions"):
-            selected_diet = []
+    if st.session_state['recipe_history']:
+        st.subheader(lang['previous_suggestions'])
+        for idx, entry in enumerate(st.session_state['recipe_history'], 1):
+            st.write(f"{idx}. {entry['ingredients']} ({', '.join(entry['diet']) if entry['diet'] else 'No restrictions'})")
+            st.code(entry['recipe'], language='markdown')
 
-        if selected_diet or st.button("Proceed without restrictions"):
-            with st.spinner("Fetching a recipe..."):
-                try:
-                    input_data = {
-                        "ingredients": diet_message,
-                        "diet": ', '.join(selected_diet) if selected_diet else 'No restrictions'
-                    }
+    col1, col2 = st.columns([2, 1])
+    with col1:
+        if st.button(lang['button_label']):
+            if not ingredients_input:
+                st.error(lang['error_message'])
+            else:
+                with st.spinner("Fetching a recipe..."):
+                    try:
+                        input_data = {
+                            "ingredients": ingredients_input,
+                            "diet": ', '.join(selected_diet) if selected_diet else 'No restrictions'
+                        }
 
-                    # Generate recipe using Together LLM
-                    response = (
-                        prompt
-                        | llm.bind(stop=["\nRecipe:"])
-                        | StrOutputParser()
-                    )
-                    result = response.invoke(input_data)
+                        response = (
+                            prompt
+                            | llm.bind(stop=["\nRecipe:"])
+                            | StrOutputParser()
+                        )
+                        result = response.invoke(input_data)
 
-                    # Store the assistant's response in the chat history
-                    assistant_message = f"**Recipe:**\n{result}"
-                    st.session_state['messages'].append({"role": "assistant", "content": assistant_message})
+                        st.session_state['recipe_history'].append({
+                            "ingredients": ingredients_input,
+                            "diet": selected_diet,
+                            "recipe": result
+                        })
 
-                    # Add recipe to the session history for display
-                    st.session_state['recipe_history'].append({
-                        "ingredients": diet_message,
-                        "diet": selected_diet,
-                        "recipe": result
-                    })
+                        st.success(lang['success_message'])
+                        st.code(result, language='markdown')
 
-                    # Display the assistant's message
-                    with st.chat_message("assistant"):
-                        st.markdown(assistant_message)
+                    except Exception as e:
+                        st.error(f"An error occurred: {e}")
+                        st.error(f"Details: {str(e)}")
 
-                except Exception as e:
-                    error_message = f"An error occurred: {e}"
-                    st.session_state['messages'].append({"role": "assistant", "content": error_message})
-                    st.error(error_message)
-
-    # Sidebar section with About information
-    with st.sidebar:
-        st.header("About")
-        st.write("Naman Gupta")
-        st.write("[GitHub](https://github.com/Namangupta123)")
-        st.write("[LinkedIn](https://www.linkedin.com/in/naman-gupta-cse)")
-        st.write("This project, ChefGPT, helps you generate Indian recipes based on ingredients you provide, including any dietary restrictions like low-carb or vegan.")
-
+    with col2:
         if st.button(lang['reset_label']):
-            st.session_state['recipe_history'].clear()
-            st.session_state['messages'].clear()
-            st.rerun()
+            try:
+                st.session_state['recipe_history'].clear()
+                st.rerun()
+            except Exception as e:
+                st.error(f"An error occurred while resetting: {e}")
 
 if __name__ == "__main__":
     main()
