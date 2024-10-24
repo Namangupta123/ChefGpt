@@ -20,7 +20,7 @@ os.environ["LANGCHAIN_PROJECT"]=st.secrets["LANGSMITH"]["LANGSMITH_PROJECT"]
 
 Together_api = st.secrets["API_KEYS"]["TOGETHER_KEY"]
 model_name=st.secrets["MODEL"]["NAME"]
-llm = Together(model=model_name, temperature=0.3, together_api_key=Together_api, max_tokens=300)
+llm = Together(model=model_name, temperature=0.3, together_api_key=Together_api, max_tokens=None)
 
 ui_translations = {
     'en': {
