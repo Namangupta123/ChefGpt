@@ -116,6 +116,7 @@ def main():
                         result = response.invoke(input_data)
                         if(not result):
                             st.error(lang['error_response'])
+                            return
 
                         st.session_state['recipe_history'].append({
                             "ingredients": ingredients_input,
