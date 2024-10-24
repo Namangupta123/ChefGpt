@@ -114,7 +114,7 @@ def main():
                             | StrOutputParser()
                         )
                         result = response.invoke(input_data)
-                        if(not result):
+                        if(result==None):
                             st.error(lang['error_response'])
                             return
 
