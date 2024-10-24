@@ -7,7 +7,7 @@ import os
 
 load_dotenv()
 
-Together_api = st.secrets["API_KEYS"]["TOGETHER_API_KEY"]
+Together_api = st.secrets["API_KEYS"]["TOGETHER_KEY"]
 model_name=st.secrets["model"]["NAME"]
 llm = Together(model=model_name, temperature=0.3, together_api_key=Together_api, max_tokens=300)
 
