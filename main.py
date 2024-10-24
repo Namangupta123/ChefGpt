@@ -86,7 +86,6 @@ def main():
 
     ingredients_input = st.text_area(lang['ingredients_label'], key="ingredients", placeholder="E.g., 'rice, cumin, turmeric'")
 
-    # Dietary restriction selection
     selected_diet = st.multiselect(lang['diet_label'], dietary_restrictions)
 
     if st.session_state['recipe_history']:
@@ -137,4 +136,4 @@ def main():
                 st.error(f"An error occurred while resetting: {e}")
 
 if __name__ == "__main__":
-    main()
+    main() 
