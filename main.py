@@ -116,6 +116,7 @@ def main():
         if st.button(lang['button_label']):
             if not ingredients_input:
                 st.error(lang['error_message'])
+                return
             else:
                 with st.spinner("Fetching a recipe..."):
                     try:
@@ -131,7 +132,7 @@ def main():
                         )
                         result = response.invoke(input_data)
                         if(result==""):
-                            st.error(lang['error_response'])
+                            st.error("Out of bucks 😭😭")
                             return
 
                         st.session_state['recipe_history'].append({
