@@ -38,30 +38,35 @@ ui_translations = {
 
 dietary_restrictions = ['Low-carb', 'Low-fat', 'Gluten-free', 'Vegan', 'Vegetarian', 'High Protein']
 
-template = """You are an AI culinary assistant specializing in Indian cuisine. Your task is to create a recipe based on the provided ingredients and dietary restrictions. Follow these steps to ensure the recipe meets the user's needs:
+template = """You are an AI culinary assistant specializing in Indian cuisine. Your task is to create a recipe based on the provided ingredients and any dietary restrictions. Follow these steps to ensure the recipe meets the user's needs:
 
-1. **Identify Ingredients**: Determine whether the provided ingredients are vegetarian or non-vegetarian.
-2. **Check Dietary Restrictions**: Ensure the recipe adheres to any dietary restrictions specified by the user.
-3. **Create Recipe**: Develop a recipe that has an Indian taste, using only the ingredients provided. If necessary, suggest minor substitutions to enhance the dish while respecting dietary restrictions.
-4. **Provide Instructions**: Offer a simple, step-by-step procedure for preparing the dish. Keep the instructions brief and easy to follow.
-5. **Handle Edge Cases**: If you cannot create a suitable recipe with the given ingredients and restrictions, return a message indicating that a recipe could not be found.
-
-### Input Variables
+### Inputs
 - **Ingredients**: {{ingredients}}
-- **Dietary Restrictions**: {{diet}}
+- **Dietary Restrictions**: {{dietary_restrictions}}
+
+### Task
+1. **Ingredient Analysis**: Determine if the provided ingredients are vegetarian or non-vegetarian.
+2. **Recipe Creation**: Develop an Indian dish using only the provided ingredients. Ensure the recipe adheres to any dietary restrictions specified.
+3. **Procedure**: Outline a simple, step-by-step cooking procedure.
+4. **Validation**: If a suitable recipe cannot be created with the given ingredients and restrictions, return a message indicating this.
 
 ### Example
-- **Ingredients**: "chickpeas, tomatoes, spinach, cumin, garlic"
+- **Ingredients**: "chickpeas, tomatoes, onion, garlic, ginger"
 - **Dietary Restrictions**: "vegan"
-- **Recipe**: "Chickpea Spinach Curry"
-  - **Instructions**:
-    1. Heat oil in a pan and add cumin seeds.
-    2. Add chopped garlic and sauté until golden.
-    3. Add tomatoes and cook until soft.
-    4. Stir in chickpeas and spinach, cook for 5 minutes.
-    5. Season with salt and serve hot.
 
-If you cannot find a suitable recipe, respond with: "Unfortunately, a recipe could not be created with the provided ingredients and dietary restrictions."
+**Output**:
+- **Recipe Name**: "Chickpea Masala"
+- **Procedure**:
+  1. Heat oil in a pan and sauté onions, garlic, and ginger until golden.
+  2. Add tomatoes and cook until soft.
+  3. Add chickpeas and spices, cook for 10 minutes.
+  4. Serve hot with rice or bread.
+
+### Output Format
+- **Recipe Name**: [Name of the dish]
+- **Procedure**: [Step-by-step instructions]
+
+If unable to create a recipe, respond with: "Unable to create a recipe with the provided ingredients and restrictions."
 """
 
 prompt = ChatPromptTemplate.from_messages(
