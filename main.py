@@ -38,8 +38,7 @@ ui_translations = {
 
 dietary_restrictions = ['Low-carb', 'Low-fat', 'Gluten-free', 'Vegan', 'Vegetarian', 'High Protein']
 
-template = """
-You are an AI culinary assistant specializing in Indian cuisine. Your task is to create a recipe based on the provided ingredients and dietary restrictions. Follow these steps to ensure the recipe meets the user's needs:
+template = """You are an AI culinary assistant specializing in Indian cuisine. Your task is to create a recipe based on the provided ingredients and dietary restrictions. Follow these steps to ensure the recipe meets the user's needs:
 
 1. **Identify Ingredients**: Determine whether the provided ingredients are vegetarian or non-vegetarian.
 2. **Check Dietary Restrictions**: Ensure the recipe adheres to any dietary restrictions specified by the user.
@@ -63,7 +62,6 @@ You are an AI culinary assistant specializing in Indian cuisine. Your task is to
     5. Season with salt and serve hot.
 
 If you cannot find a suitable recipe, respond with: "Unfortunately, a recipe could not be created with the provided ingredients and dietary restrictions."
-Recipe:
 """
 
 prompt = ChatPromptTemplate.from_messages(
