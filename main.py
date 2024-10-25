@@ -1,7 +1,7 @@
 import streamlit as st
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
-from langchain_together import Together
+from langchain_mistralai import ChatMistralAI
 # from dotenv import load_dotenv
 import os
 
@@ -18,9 +18,9 @@ os.environ["LANGCHAIN_ENDPOINT"]=st.secrets["LANGSMITH"]["LANGSMITH_ENDPOINT"]
 os.environ["LANGCHAIN_API_KEY"]=st.secrets["API_KEYS"]["LANGSMITH_API"]
 os.environ["LANGCHAIN_PROJECT"]=st.secrets["LANGSMITH"]["LANGSMITH_PROJECT"]
 
-Together_api = st.secrets["API_KEYS"]["TOGETHER_KEY"]
+Mistral_api = st.secrets["API_KEYS"]["MISTRAL_KEY"]
 model_name=st.secrets["MODEL"]["NAME"]
-llm = Together(model=model_name, temperature=0.3, together_api_key=Together_api, max_tokens=300)
+llm = ChatMistralAI(model=model_name, temperature=0.7, together_api_key=Mistral_api, max_tokens=1000)
 
 ui_translations = {
     'en': {
