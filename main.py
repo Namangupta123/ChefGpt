@@ -38,35 +38,13 @@ ui_translations = {
 
 dietary_restrictions = ['Low-carb', 'Low-fat', 'Gluten-free', 'Vegan', 'Vegetarian', 'High Protein']
 
-template = """You are an AI culinary assistant specializing in Indian cuisine. Your task is to create a recipe based on the provided ingredients and any dietary restrictions. Follow these steps to ensure the recipe meets the user's needs:
-
-### Inputs
-- **Ingredients**: {{ingredients}}
-- **Dietary Restrictions**: {{dietary_restrictions}}
-
-### Task
-1. **Ingredient Analysis**: Determine if the provided ingredients are vegetarian or non-vegetarian.
-2. **Recipe Creation**: Develop an Indian dish using only the provided ingredients. Ensure the recipe adheres to any dietary restrictions specified.
-3. **Procedure**: Outline a simple, step-by-step cooking procedure.
-4. **Validation**: If a suitable recipe cannot be created with the given ingredients and restrictions, return a message indicating this.
-
-### Example
-- **Ingredients**: "chickpeas, tomatoes, onion, garlic, ginger"
-- **Dietary Restrictions**: "vegan"
-
-**Output**:
-- **Recipe Name**: "Chickpea Masala"
-- **Procedure**:
-  1. Heat oil in a pan and sauté onions, garlic, and ginger until golden.
-  2. Add tomatoes and cook until soft.
-  3. Add chickpeas and spices, cook for 10 minutes.
-  4. Serve hot with rice or bread.
-
-### Output Format
-- **Recipe Name**: [Name of the dish]
-- **Procedure**: [Step-by-step instructions]
-
-If unable to create a recipe, respond with: "Unable to create a recipe with the provided ingredients and restrictions."
+template = """Based on the ingredients provided and if any dietary restrictions are entered by user so sugesst accordingly, 
+suggest an recipe which have indian taste basically indian dish. 
+Stick to only those ingredients provided by the user.
+Decide whether the ingredients contain any non-veg or veg option and return the result accordingly.
+If any dietary restrictions are provided, ensure the recipe adheres to them.
+Provide a simple, step-wise procedure in brief.
+If not able to find one return appropriate message."
 """
 
 prompt = ChatPromptTemplate.from_messages(
