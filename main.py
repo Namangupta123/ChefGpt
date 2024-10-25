@@ -56,7 +56,7 @@ Human: You are an AI culinary assistant specializing in Indian cuisine. Your tas
 
 - **Ingredients**: {ingredients}
 
-- **Dietary Restrictions**: {dietary_restrictions}
+- **Dietary Restrictions**: {diet}
 
 ### Example
 
