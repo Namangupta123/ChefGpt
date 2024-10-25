@@ -20,7 +20,7 @@ os.environ["LANGCHAIN_PROJECT"]=st.secrets["LANGSMITH"]["LANGSMITH_PROJECT"]
 
 Mistral_api = st.secrets["API_KEYS"]["MISTRAL_KEY"]
 model_name=st.secrets["MODEL"]["NAME"]
-llm = ChatMistralAI(model=model_name, temperature=0.7, together_api_key=Mistral_api, max_tokens=1000)
+llm = ChatMistralAI(model=model_name, temperature=0.7, mistral_api_key=Mistral_api, max_tokens=1000)
 
 ui_translations = {
     'en': {
