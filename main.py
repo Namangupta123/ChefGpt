@@ -10,7 +10,7 @@ import os
 # os.environ["LANGCHAIN_ENDPOINT"]=os.getenv("LANGSMITH_ENDPOINT")
 # os.environ["LANGCHAIN_API_KEY"]=os.getenv("LANGSMITH_API")
 # os.environ["LANGCHAIN_PROJECT"]=os.getenv("LANGSMITH_PROJECT")
-# Together_api = os.getenv("TOGETHER_KEY")
+# Mistral_key = os.getenv("MISTRAL_KEY")
 # model_name= os.getenv("NAME")
 
 os.environ["LANGCHAIN_TRACING_V2"]="true"
