@@ -1,6 +1,8 @@
 # ChefGPT
 
-Welcome to ChefGPT, a Streamlit application designed to help you discover delicious Indian recipes based on the ingredients you have at home and any dietary restrictions you might follow.
+Welcome to ChefGPT, a Streamlit application designed to help you discover delicious Indian recipes based on the ingredients you have at home and any dietary restrictions you might follow. 
+
+This application uses `st.secrets` for securely managing API keys and other sensitive information.
 
 ## Features
 
@@ -37,11 +39,11 @@ To run this application locally, you'll need Python and Streamlit installed. Fol
 ## Dependencies
 
 - Streamlit
-- LangChain Together
+- LangChain Mistral
 - python-dotenv
 - os
 
-Ensure you have a `.env` file with your API keys set up as shown in the `.env.example` file.
+Ensure you have a `.env` file with your API keys set up as shown in the `.env.example` file. Alternatively, you can use `st.secrets` for managing your API keys as demonstrated in the `main.py` file. Comments in the `main.py` file provide guidance on how to switch between using `.env` files and `st.secrets`.
 
 ## Contributing
 
