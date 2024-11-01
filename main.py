@@ -23,7 +23,6 @@ model_name=st.secrets["MODEL"]["NAME"]
 llm = ChatMistralAI(model=model_name, temperature=0.7, mistral_api_key=Mistral_api, max_tokens=10000)
 
 logo_path="/Users/namangupta/Desktop/Projects/Indian_recipe/ChefGPT.png"
-st.sidebar.image(logo_path)
 
 ui_translations = {
     'en': {
@@ -100,7 +99,7 @@ def main():
 
     lang = ui_translations['en']
 
-    st.set_page_config(page_title=lang['title'], layout="wide")
+    st.set_page_config(page_title=lang['title'], layout="wide", page_icon=logo_path)
 
     st.title(lang['title'])
 
