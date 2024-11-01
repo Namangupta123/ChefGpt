@@ -22,7 +22,7 @@ Mistral_api = st.secrets["API_KEYS"]["MISTRAL_KEY"]
 model_name=st.secrets["MODEL"]["NAME"]
 llm = ChatMistralAI(model=model_name, temperature=0.7, mistral_api_key=Mistral_api, max_tokens=10000)
 
-logo_path="/Users/namangupta/Desktop/Projects/Indian_recipe/ChefGPT.png"
+logo_path="ChefGPT.png"
 
 ui_translations = {
     'en': {
