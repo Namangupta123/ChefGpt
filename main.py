@@ -159,4 +159,10 @@ def main():
                 st.error(f"An error occurred while resetting: {e}")
 
 if __name__ == "__main__":
-    main() 
+    with st.sidebar:
+        with st.expander("Disclaimer"):
+            st.write("This is an AI model so results can be wrong")
+        if st.checkbox("I acknowledge the disclaimer"):
+            main()
+        else:
+            st.warning("Please")
