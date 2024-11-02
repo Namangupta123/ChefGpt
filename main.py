@@ -96,6 +96,9 @@ def init_session_state():
 
 def main():
     init_session_state()
+    
+    with st.expander("Disclaimer"):
+        st.write("This is an AI model, so results may vary and should be taken as suggestions.")
 
     lang = ui_translations['en']
 
@@ -159,10 +162,4 @@ def main():
                 st.error(f"An error occurred while resetting: {e}")
 
 if __name__ == "__main__":
-    with st.sidebar:
-        with st.expander("Disclaimer"):
-            st.write("This is an AI model so results can be wrong")
-        if st.checkbox("I acknowledge the disclaimer"):
-            main()
-        else:
-            st.warning("Please")
+    main()
