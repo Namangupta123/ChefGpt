@@ -96,10 +96,6 @@ def init_session_state():
 
 def main():
     init_session_state()
-    
-    with st.expander("Disclaimer"):
-        st.write("This is an AI model, so results may vary and should be taken as suggestions.")
-
     lang = ui_translations['en']
 
     st.set_page_config(page_title=lang['title'], layout="wide", page_icon=logo_path)
